@@ -323,6 +323,16 @@ def send_test_result_email():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
+@app.route('/webhook', methods=['POST'])
+def telegram_webhook():
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return '', 200
+    else:
+        return '', 403
+
 # Этот блок нужен только для локального запуска (например, python admin.py)
 # На Render используется Gunicorn, который сам управляет портом через переменную окружения $PORT
 if __name__ == '__main__':
