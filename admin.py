@@ -8,6 +8,7 @@ bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 import smtplib
 from email.message import EmailMessage
 import base64
+import os
 
 
 def get_test_stats_sqlite(user_id):
@@ -322,5 +323,8 @@ def send_test_result_email():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
+# Этот блок нужен только для локального запуска (например, python admin.py)
+# На Render используется Gunicorn, который сам управляет портом через переменную окружения $PORT
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
