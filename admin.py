@@ -333,6 +333,10 @@ def telegram_webhook():
     else:
         return '', 403
 
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(message.chat.id, "Привет!")
+
 # Этот блок нужен только для локального запуска (например, python admin.py)
 # На Render используется Gunicorn, который сам управляет портом через переменную окружения $PORT
 if __name__ == '__main__':
